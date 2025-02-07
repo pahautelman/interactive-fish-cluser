@@ -1,8 +1,8 @@
-let numParticles = 40;
-let particleSize = 20;
+let numParticles = 10;
+let particleSize = 10;
 let maxSpeed = 5;
-let neighbourhoodRadius = 100;
-let wSeparation = 10 * particleSize;
+let neighbourhoodRadius = 10 * particleSize;
+let wSeparation = 20 * particleSize + 0.1*numParticles;
 let wAlignment = 0.4;
 let wCohesion = 0.4;
 
