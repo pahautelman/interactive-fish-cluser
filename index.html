@@ -2,21 +2,228 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sketch</title>
-
-    <link rel="stylesheet" type="text/css" href="style.css">
-
+    <link rel="stylesheet" type="text/css" href="style.css" />
     <script src="libraries/p5.min.js"></script>
     <script src="libraries/p5.sound.min.js"></script>
+  </head>
+
+  <body>
+    <div class="settings-panel">
+      <div class="settings-header" onclick="toggleSettings()">
+        🐠 Swarm Intelligence Controls
+        <span class="toggle-icon" id="toggleIcon">▼</span>
+      </div>
+
+      <div class="settings-content" id="settingsContent">
+        <div class="welcome-message">
+          <h3>Welcome to Swarm Intelligence! <span class="cat-emoji">🐱</span></h3>
+          <p>
+            This interactive animation demonstrates the beautiful behavior of
+            fish schooling - a perfect example of swarm intelligence and
+            emergent behavior. Watch as simple rules create complex, lifelike
+            movement patterns!
+          </p>
+          <p>
+            <em>
+              Click anywhere to add obstacles and see how the swarm adapts. This
+              project is approved and loved by all cats!
+              <span class="cat-emoji">🐾</span>
+            </em>
+          </p>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">Number of Particles</label>
+          <input
+            type="range"
+            class="setting-input"
+            id="numParticles"
+            min="2"
+            max="100"
+            value="10"
+            oninput="updateSetting('numParticles', this.value)"
+          />
+          <div class="range-display">
+            Range: 2-100 | Current: <span id="numParticles-value">10</span>
+          </div>
+          <div class="setting-info">
+            Controls how many fish swim in the school. More particles create
+            richer flocking behavior but may impact performance.
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">Particle Size</label>
+          <input
+            type="range"
+            class="setting-input"
+            id="particleSize"
+            min="5"
+            max="30"
+            value="10"
+            oninput="updateSetting('particleSize', this.value)"
+          />
+          <div class="range-display">
+            Range: 5-30 | Current: <span id="particleSize-value">10</span>
+          </div>
+          <div class="setting-info">
+            Adjusts the visual size of each fish. Larger fish are easier to see
+            but may overlap more.
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">Max Speed</label>
+          <input
+            type="range"
+            class="setting-input"
+            id="maxSpeed"
+            min="1"
+            max="10"
+            step="0.5"
+            value="5"
+            oninput="updateSetting('maxSpeed', this.value)"
+          />
+          <div class="range-display">
+            Range: 1-10 | Current: <span id="maxSpeed-value">5</span>
+          </div>
+          <div class="setting-info">
+            Sets the maximum swimming speed. Higher speeds create more dynamic
+            movement but less stable formations.
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">Neighborhood Radius</label>
+          <input
+            type="range"
+            class="setting-input"
+            id="neighbourhoodRadius"
+            min="5"
+            max="50"
+            value="10"
+            oninput="updateSetting('neighbourhoodRadius', this.value)"
+          />
+          <div class="range-display">
+            Range: 5-50 | Current:
+            <span id="neighbourhoodRadius-value">10</span> (×particle size)
+          </div>
+          <div class="setting-info">
+            Determines how far each fish can "see" its neighbors. Larger radius
+            creates more cohesive but slower-responding groups.
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">Separation Weight</label>
+          <input
+            type="range"
+            class="setting-input"
+            id="wSeparation"
+            min="5"
+            max="50"
+            value="20"
+            oninput="updateSetting('wSeparation', this.value)"
+          />
+          <div class="range-display">
+            Range: 5-50 | Current:
+            <span id="wSeparation-value">20</span> (×particle size + 0.1×particles)
+          </div>
+          <div class="setting-info">
+            Controls how strongly fish avoid crowding. Higher values prevent
+            overlapping but may break up the school.
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">Alignment Weight</label>
+          <input
+            type="range"
+            class="setting-input"
+            id="wAlignment"
+            min="0"
+            max="1"
+            step="0.1"
+            value="0.4"
+            oninput="updateSetting('wAlignment', this.value)"
+          />
+          <div class="range-display">
+            Range: 0-1 | Current: <span id="wAlignment-value">0.4</span>
+          </div>
+          <div class="setting-info">
+            How much fish try to match their neighbors' direction. Higher values
+            create more synchronized swimming.
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">Cohesion Weight</label>
+          <input
+            type="range"
+            class="setting-input"
+            id="wCohesion"
+            min="0"
+            max="1"
+            step="0.1"
+            value="0.4"
+            oninput="updateSetting('wCohesion', this.value)"
+          />
+          <div class="range-display">
+            Range: 0-1 | Current: <span id="wCohesion-value">0.4</span>
+          </div>
+          <div class="setting-info">
+            How strongly fish are attracted to the center of their group.
+            Higher values keep the school tighter together.
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">Obstacle Radius</label>
+          <input
+            type="range"
+            class="setting-input"
+            id="obstacleRadius"
+            min="10"
+            max="100"
+            value="40"
+            oninput="updateSetting('obstacleRadius', this.value)"
+          />
+          <div class="range-display">
+            Range: 10-100 | Current: <span id="obstacleRadius-value">40</span>
+          </div>
+          <div class="setting-info">
+            Size of obstacles you create by clicking. Larger obstacles create
+            more dramatic avoidance behaviors.
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">Trail Length</label>
+          <input
+            type="range"
+            class="setting-input"
+            id="trailLength"
+            min="0"
+            max="30"
+            value="15"
+            oninput="updateSetting('trailLength', this.value)"
+          />
+          <div class="range-display">
+            Range: 0-30 | Current: <span id="trailLength-value">15</span>
+          </div>
+          <div class="setting-info">
+            Length of the glowing trail behind each fish. Longer trails create
+            more beautiful effects but may impact performance.
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="classes/Environment.js"></script>
     <script src="classes/Particle.js"></script>
     <script src="classes/Swarm.js"></script>
-  </head>
-
-  <body>
     <script src="sketch.js"></script>
   </body>
 </html>

@@ -1,5 +1,4 @@
 class Swarm {
-
     static environment;
 
     static setEnvironment(environment) {
@@ -172,6 +171,4 @@ class Swarm {
             : avgPos;
         return avgPos.limit(this.maxSpeed);
       }
-
 }
-

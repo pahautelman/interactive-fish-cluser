@@ -1,25 +1,24 @@
 class Particle {
-
     static environment;
-
+    
     static setEnvironment(environment) {
         Particle.environment = environment;
     }
-
+    
     constructor() {
         this.position = createVector(
             random(Particle.environment.screenWidth), 
-            random(Particle.environment.screenHeight));
+            random(Particle.environment.screenHeight)
+        );
         let maxSpeed = Particle.environment.maxSpeed;
         this.velocity = createVector(
             random(-maxSpeed, maxSpeed), 
-            random(-maxSpeed, maxSpeed));
+            random(-maxSpeed, maxSpeed)
+        );
         
-        // store previous positions to create a trail effect.
-        this.history = []; // For storing previous positions
-        this.trailLength = 15; // Number of trail segments
+        this.history = [];
     }
-
+    
     static fromPositionAndVelocity(position, velocity) {
         let particle = new Particle();
         particle.position = position.copy();
@@ -30,13 +29,12 @@ class Particle {
     display() {
         // Add current position to history
         this.history.push(this.position.copy());
-        if (this.history.length > this.trailLength) {
+        if (this.history.length > Particle.environment.trailLength) {
             this.history.shift();
         }
-
-        // Optionally, you can draw the trail by uncommenting the next line.
+        
         this.drawTrail();
-
+        
         // Draw fish with glow
         push();
         translate(this.position.x, this.position.y);
@@ -54,7 +52,7 @@ class Particle {
             );
         }
         blendMode(BLEND);
-
+        
         // Fish body
         noStroke();
         fill(255, 150, 150);
@@ -75,11 +73,12 @@ class Particle {
         // Eye
         fill(255);
         circle(1.5 * Particle.environment.particleSize, 0, 0.5 * Particle.environment.particleSize);
-
         pop();
     }
-
+    
     drawTrail() {
+        if (Particle.environment.trailLength === 0) return;
+        
         for (let i = 0; i < this.history.length; i++) {
             const alpha = map(i, 0, this.history.length, 20, 100);
             const size = map(i, 0, this.history.length, 0.9, 2) * Particle.environment.particleSize;
@@ -93,5 +92,5 @@ class Particle {
             blendMode(BLEND);
             pop();
         }
-    }      
+    }
 }
