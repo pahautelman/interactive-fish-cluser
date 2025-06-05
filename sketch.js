@@ -85,7 +85,7 @@ function draw() {
 
 function mousePressed() {
     // Don't add obstacles if clicking on the settings panel
-    if (mouseY < 200) return;
+    if (mouseX > width - 350 && mouseY < 40) return;
     
     // Add new obstacle at click position
     environment.obstacles.push({
