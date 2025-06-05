@@ -4,12 +4,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sketch</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
     <script src="libraries/p5.min.js"></script>
     <script src="libraries/p5.sound.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="classes/Environment.js"></script>
+    <script src="classes/Particle.js"></script>
+    <script src="classes/Swarm.js"></script>
   </head>
 
   <body>
+    <script src="sketch.js"></script>
+
     <div class="settings-panel">
       <div class="settings-header" onclick="toggleSettings()">
         🐠 Swarm Intelligence Controls
@@ -220,10 +226,5 @@
         </div>
       </div>
     </div>
-
-    <script src="classes/Environment.js"></script>
-    <script src="classes/Particle.js"></script>
-    <script src="classes/Swarm.js"></script>
-    <script src="sketch.js"></script>
   </body>
 </html>
